@@ -36,7 +36,7 @@ jobs:
 
     strategy:
       matrix:
-        sanitizer: [ADDRESS, THREAD]
+        sanitizer: [ADDRESS, THREAD, UNDEFINED]
         build_type: [RelWithDebInfo]
         include:
           - build_type: Release
@@ -76,11 +76,11 @@ jobs:
             -DLLAMA_BUILD_BORINGSSL=ON \
             -DGGML_SCHED_NO_REALLOC=ON \
             -DGGML_SANITIZE_ADDRESS=${{ matrix.sanitizer == 'ADDRESS' }} \
-            -DGGML_SANITIZE_ADDRESS=${{ matrix.sanitizer == 'THREAD' }} \
-            -DGGML_SANITIZE_UNDEFINED=${{ matrix.sanitizer != '' }} \
+            -DGGML_SANITIZE_THREAD=${{ matrix.sanitizer == 'THREAD' }} \
+            -DGGML_SANITIZE_UNDEFINED=${{ matrix.sanitizer == 'UNDEFINED' }} \
             -DLLAMA_SANITIZE_ADDRESS=${{ matrix.sanitizer == 'ADDRESS' }} \
-            -DLLAMA_SANITIZE_ADDRESS=${{ matrix.sanitizer == 'THREAD' }} \
-            -DLLAMA_SANITIZE_UNDEFINED=${{ matrix.sanitizer != '' }}
+            -DLLAMA_SANITIZE_THREAD=${{ matrix.sanitizer == 'THREAD' }} \
+            -DLLAMA_SANITIZE_UNDEFINED=${{ matrix.sanitizer == 'UNDEFINED' }}
           cmake --build build --config ${{ matrix.build_type }} -j ${env:NUMBER_OF_PROCESSORS} --target llama-server
 
       - name: Python setup
@@ -96,7 +96,7 @@ jobs:
 
       - name: Tests
         id: server_integration_tests
-        if: ${{ (!matrix.disabled_on_pr || !github.event.pull_request) && matrix.build_type == 'Release' }}
+        if: ${{ (!matrix.disabled_on_pr || !github.event.pull_request) }}
         run: |
           cd tools/server/tests
           export ${{ matrix.extra_args }}
