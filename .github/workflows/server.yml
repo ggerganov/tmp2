@@ -38,7 +38,6 @@ jobs:
     strategy:
       matrix:
         build_type: [Release]
-        wf_name: "default"
         include:
           - build_type: Release
             extra_args: ""
