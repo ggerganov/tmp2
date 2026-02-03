@@ -141,18 +141,24 @@ jobs:
   server-metal:
     runs-on: [self-hosted, macOS, ARM64]
 
+    name: server-metal (${{ matrix.build_type }} – ${{ matrix.wf_name }})
     strategy:
       matrix:
         build_type: [Release]
+        wf_name: ""
         include:
           - build_type: Release
-            extra_args: ""
+            extra_args: "GPUx1"
+            wf_name:    "default"
           - build_type: Release
             extra_args: "LLAMA_ARG_BACKEND_SAMPLING=1"
+            wf_name:    "GPUx1, backend-sampling"
           - build_type: Release
             extra_args: "GGML_METAL_DEVICES=2"
+            wf_name:    "GPUx2"
           - build_type: Release
             extra_args: "GGML_METAL_DEVICES=2 LLAMA_ARG_BACKEND_SAMPLING=1"
+            wf_name:    "GPUx2, backend-sampling"
       fail-fast: false
 
     steps:
