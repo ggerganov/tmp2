@@ -38,11 +38,11 @@ jobs:
     strategy:
       matrix:
         build_type: [Release]
-        wf_name: ""
+        wf_name: "default"
         include:
           - build_type: Release
-            extra_args: "GPUx1"
-            wf_name:    "default"
+            extra_args: ""
+            wf_name:    "GPUx1"
           - build_type: Release
             extra_args: "LLAMA_ARG_BACKEND_SAMPLING=1"
             wf_name:    "GPUx1, backend-sampling"
