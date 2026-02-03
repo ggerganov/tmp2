@@ -1211,6 +1211,9 @@ static void llama_sampler_dist_backend_set_input(struct llama_sampler * smpl) {
     std::uniform_real_distribution<double> dist(0.0f, 1.0f);
     const float rnd = dist(sctx->rng);
 
+    LLAMA_LOG_WARN("XXXXXXXXXXXXXXXX setting rnd = %f\n", rnd); // DEBUG
+
+
     ggml_backend_tensor_set(sctx->inp_uniform, &rnd, 0, sizeof(float));
 }
 
