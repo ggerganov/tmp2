@@ -1300,7 +1300,7 @@ static void ggml_compute_forward_sum_f32(
             }
         }
     }
-    printf("XXXXXXXXXXXXX sum = %f\n", sum);
+    printf("XXXXXXXXXXXXX sum = %f\n", sum); fflush(stdout);
     ((float *) dst->data)[0] = sum;
 }
 
@@ -4745,7 +4745,7 @@ static void ggml_compute_forward_get_rows_f32(
         const int64_t i10 = (i - i12*ne11*ne10 - i11*ne10);
         const int64_t i01 = *(int32_t *) ((char *) src1->data + i10*nb10 + i11*nb11 + i12*nb12);
 
-        printf("XXXXXXXX i = %ld, i01 = %ld, ne01 = %ld\n", i, i01, ne01);
+        printf("XXXXXXXX i = %ld, i01 = %ld, ne01 = %ld\n", i, i01, ne01); fflush(stdout);
         GGML_ASSERT(i01 >= 0 && i01 < ne01);
 
         ggml_vec_cpy_f32(nc,
@@ -4866,6 +4866,7 @@ static void ggml_compute_forward_set_rows_f32(
 
                 const int64_t i1 = *(idx_t *) ((char *) src1->data + i10*nb10 + i11*nb11 + i12*nb12);
 
+                printf("XXXXXXXXX dst->name = '%s', i = %ld, i1 = %ld, ne1 = %ld\n", dst->name, i, i1, ne1); fflush(stdout); // DEBUG
                 GGML_ASSERT(i1 >= 0 && i1 < ne1);
 
                 from_float(
