@@ -395,10 +395,12 @@ static int test_backends(const llm_arch target_arch, const size_t seed, const gg
         } original_logger;
         ggml_log_level min_level; // prints below this log level go to debug log
     };
+    printf("checkpoint 4\n");
     user_data_t ud;
     llama_log_get(&ud.original_logger.callback, &ud.original_logger.user_data);
     ud.min_level = log_level;
 
+    printf("checkpoint 5\n");
     llama_log_set([](ggml_log_level level, const char * text, void * user_data) {
         const user_data_t * ud = (const user_data_t *) user_data;
         const ggml_log_level level_eff = level >= ud->min_level ? level : GGML_LOG_LEVEL_DEBUG;
@@ -412,6 +414,7 @@ static int test_backends(const llm_arch target_arch, const size_t seed, const gg
     printf("|%15s|%30s|%6s|%8s|%6s|\n", "Model arch.", "Device", "Config", "NMSE", "Status");
     printf("|---------------|------------------------------|------|--------|------|\n");
     for (const llm_arch & arch : llm_arch_all()) {
+        printf("checkpoint 6 : %s\n", llm_arch_name(arch));
         if (target_arch != LLM_ARCH_UNKNOWN && arch != target_arch) {
             continue;
         }
@@ -470,6 +473,7 @@ static int test_backends(const llm_arch target_arch, const size_t seed, const gg
             }
         }
     }
+    printf("checkpoint 7 \n");
     llama_log_set(ud.original_logger.callback, ud.original_logger.user_data);
     return all_ok ? 0 : 1;
 }
@@ -478,10 +482,14 @@ int main(int argc, char ** argv) {
     common_init();
     std::random_device rd;
 
+    printf("checkpoint 0\n");
+
     llm_arch arch = LLM_ARCH_UNKNOWN;
     size_t seed = rd();
     ggml_log_level log_level = GGML_LOG_LEVEL_ERROR;
     std::string out;
+
+    printf("checkpoint 1\n");
 
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "-a") == 0 || strcmp(argv[i], "--arch") == 0) {
@@ -519,13 +527,16 @@ int main(int argc, char ** argv) {
         }
     }
 
+    printf("checkpoint 2\n");
     try {
         if (!out.empty()) {
             return save_models(arch, seed, log_level, out);
         }
+        printf("checkpoint 3\n");
         return test_backends(arch, seed, log_level);
     } catch (const std::exception & err) {
         fprintf(stderr, "encountered runtime error: %s\n", err.what());
         return -1;
     }
+    printf("checkpoint EEEEEND\n");
 }
