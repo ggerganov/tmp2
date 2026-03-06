@@ -67,12 +67,18 @@ jobs:
         id: checkout
         uses: actions/checkout@v6
 
+      - name: ccache
+        uses: ggml-org/ccache-action@v1.2.16
+        with:
+          key: macOS-latest-cmake-arm64
+          evict-old-files: 1d
+          save: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+
       - name: Build
         id: cmake_build
         run: |
           sysctl -a
           cmake -B build \
-            -DGGML_CCACHE=OFF \
             -DCMAKE_BUILD_RPATH="@loader_path" \
             -DLLAMA_FATAL_WARNINGS=ON \
             -DLLAMA_BUILD_BORINGSSL=ON \
@@ -87,4 +93,4 @@ jobs:
         id: cmake_test
         run: |
           cd build
-          ./bin/test-llama-archs
+          ctest -L main -E "test-llama-arch" --verbose --timeout 900
