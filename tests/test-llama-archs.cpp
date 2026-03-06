@@ -481,7 +481,6 @@ static int test_backends(const llm_arch target_arch, const size_t seed, const gg
 int main(int argc, char ** argv) {
     printf("checkpoint -2\n");
 
-    common_init();
     std::random_device rd;
 
     printf("checkpoint 0\n");
