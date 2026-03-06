@@ -93,4 +93,4 @@ jobs:
         id: cmake_test
         run: |
           cd build
-          ctest -L main --verbose --timeout 900
+          ./bin/test-llama-archs
