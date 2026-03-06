@@ -79,6 +79,7 @@ jobs:
         run: |
           sysctl -a
           cmake -B build \
+            -DGGML_CCACHE=OFF \
             -DCMAKE_BUILD_RPATH="@loader_path" \
             -DLLAMA_FATAL_WARNINGS=ON \
             -DLLAMA_BUILD_BORINGSSL=ON \
